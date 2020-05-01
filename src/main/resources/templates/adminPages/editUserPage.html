@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+</head>
+<body>
+<form action="#" th:action="@{/admin/edit}" th:object="${user}" method="post">
+    <label for="id">id</label>
+    <input type="text" th:field="*{id}" id="id" placeholder="Id" readonly><br><br>
+    <label for="firstName">First name</label>
+    <input type="text" th:field="*{userName}" id="firstName" placeholder="First Name"><br><br>
+    <label for="lastName">Last name</label>
+    <input type="text" th:field="*{lastName}" id="lastName" placeholder="Last Name"><br><br>
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password" placeholder="Password"><br><br>
+    <label for="email">Email:</label>
+    <input type="text" th:field="*{email}" id="email" placeholder="@yandex.ru"><br><br>
+    <label for="age">Age:</label>
+    <input type="number" th:field="*{age}" id="age" placeholder="age"><br><br>
+    <label for="sex">Sex:</label>
+    <select name="sex" th:field="*{sex}" id="sex">
+        <option selected value="MALE">Мужской</option>
+        <option selected value="FEMALE">Женский</option>
+    </select>
+    <!--    TODO SEX!   -->
+    <button type="submit">Edit</button>
+</form>
+</body>
+</html>
