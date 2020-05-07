@@ -12,9 +12,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
 
-//    @Modifying
-//    @Query("update User u set u.userName = :userName, u.lastName = :lastName, u.password = :password, u.age = :age," +
-//            "u.email = :email where u.id = :id")
-//    int editUser(@Param("userName") String userName, @Param("lastName") String lastName, @Param("password") String password,
-//                 @Param("age") Integer age, @Param("id") Long id);
+    User findUserByUserName(String userName);
+
 }

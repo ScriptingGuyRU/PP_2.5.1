@@ -19,14 +19,4 @@ public class loginController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public String login(){
-        return "loginPage";
-    }
-
-    @PostMapping("/login")
-    public String loginPost(){
-        //TODO make SS
-        return "redirect:/admin";
-    }
 }

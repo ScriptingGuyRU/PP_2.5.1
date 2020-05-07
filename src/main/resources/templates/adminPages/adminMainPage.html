@@ -17,6 +17,7 @@
                 <th>Last Name</th>
                 <th>Age</th>
                 <th>Email</th>
+                <th>Role</th>
             </tr>
             </thead>
             <tbody>
@@ -26,6 +27,9 @@
                 <td th:text="${user.lastName}"></td>
                 <td th:text="${user.age}"></td>
                 <td th:text="${user.email}"></td>
+                <td>
+                    <div th:each="role : ${user.roles}" th:text="${role}"></div>
+                </td>
                 <td>
                     <form>
                         <div>
@@ -53,7 +57,7 @@
         </table>
         </p>
     </span>
-    <p><a href="/admin/add">Create user</a></p>
+    <p><a th:href="@{/admin/add}">Create user</a></p>
 </div>
 
 </body>

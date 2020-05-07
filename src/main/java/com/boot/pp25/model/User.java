@@ -1,55 +1,70 @@
 package com.boot.pp25.model;
 
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    @Size(min = 3, max = 10)
     @Column(name = "username")
+    @NotBlank(message = "Поле не должно быть пустым")
     private String userName;
 
+    @Size(min = 3, max = 10)
     @Column(name = "password")
+    @NotBlank(message = "Поле не должно быть пустым")
     private String password;
 
+    @Size(min = 3, max = 10)
     @Column(name = "lastName")
+    @NotBlank(message = "Поле не должно быть пустым")
     private String lastName;
 
+    @Digits(integer = 2, fraction = 0, message = "Не более 2-х знаков")
     @Column(name = "age")
+    @NotNull(message = "Поле не должно быть пустым")
+    @Min(value = 0)
     private Integer age;
 
     @Column(name = "sex")
+    @NotBlank(message = "Поле не должно быть пустым")
     private String sex;
 
     @Column(name = "email")
+    @NotBlank(message = "Поле не должно быть пустым")
+    @Email(message = "Поле должно быть по стандартам email")
     private String email;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"),
+                inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(Long id, String userName, String password, String lastName, Integer age, String sex, String email) {
-        this.id = id;
+    public User(String userName, String password, String lastName, Integer age, String sex, String email, Set<Role> roles) {
         this.userName = userName;
         this.password = password;
         this.lastName = lastName;
         this.age = age;
         this.sex = sex;
         this.email = email;
-    }
-
-    public User(String userName, String password, String lastName, Integer age, String sex, String email) {
-        this.userName = userName;
-        this.password = password;
-        this.lastName = lastName;
-        this.age = age;
-        this.sex = sex;
-        this.email = email;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -68,8 +83,38 @@ public class User {
         this.userName = userName;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return getUserName();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -108,6 +153,14 @@ public class User {
         this.email = email;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,11 +172,14 @@ public class User {
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(age, user.age) &&
                 Objects.equals(sex, user.sex) &&
-                Objects.equals(email, user.email);
+                Objects.equals(email, user.email) &&
+                Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, password, lastName, age, sex, email);
+        return Objects.hash(id, userName, password, lastName, age, sex, email, roles);
     }
+
 }
+
